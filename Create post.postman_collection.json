@@ -1,0 +1,2251 @@
+{
+	"info": {
+		"_postman_id": "9448b9a8-7164-419a-a931-7a495e84e0be",
+		"name": "Create post",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25360110"
+	},
+	"item": [
+		{
+			"name": "Login user",
+			"item": [
+				{
+					"name": "login_admin_profile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"admin_token\", pm.response.json().token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "GB202307276130",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "8b0444ef41",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/login",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_test_user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"test_username\", Math.random().toString(36).substr(2, 10));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();\r",
+									"pm.collectionVariables.set(\"test_username\", data.item.username);\r",
+									"pm.collectionVariables.set(\"test_password\", data.item.password);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+								},
+								{
+									"key": "firstName",
+									"value": "Ivan",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "Ivanov",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{test_username}}",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "89056789809",
+									"type": "text"
+								},
+								{
+									"key": "sex",
+									"value": "male",
+									"type": "text"
+								},
+								{
+									"key": "birthDate",
+									"value": "1985-01-01",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/dummies",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"dummies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "auth_test_user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"token_test_user\", jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "{{test_username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{test_password}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/login",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create Post",
+			"item": [
+				{
+					"name": "create_new_post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"item\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"title\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"description\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"content\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"authorId\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"mainImage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"updatedAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"createdAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"labels\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"delayPublishTo\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"draft\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.jpg"
+								},
+								{
+									"key": "title",
+									"value": "Проснувшись однажды.",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Душа моя озарена неземной радостью, как эти чудесн",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь от всего сердца. Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив, мой друг, так упоен ощущением покоя, что искусство мое страдает от этого. Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч.",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{tomorrow_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_post_only_with_title",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"item\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"title\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"description\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"content\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"authorId\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"mainImage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"updatedAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"createdAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"labels\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"delayPublishTo\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"draft\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/sweet/Desktop/IMG.jpg",
+									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": "Проснувшись однажды.",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{tomorrow_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_post_only_with_description",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"item\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"title\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"description\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"content\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"authorId\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"mainImage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"updatedAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"createdAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"labels\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"delayPublishTo\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"draft\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Душа моя озарена неземной радостью, как эти чудесн",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_post_only_with_content",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"item\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"title\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"description\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"content\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"authorId\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"mainImage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"updatedAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"createdAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"labels\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"delayPublishTo\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"draft\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/sweet/Desktop/IMG.jpg",
+									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь от всего сердца. Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив, мой друг, так упоен ощущением покоя, что искусство мое страдает от этого. Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч.",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_post_only_with_image",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"item\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"title\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"description\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"content\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"authorId\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"mainImage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"updatedAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"createdAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"labels\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"delayPublishTo\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"draft\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.jpg"
+								},
+								{
+									"key": "title",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{tomorrow_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_empty_post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(\"Error message is correct\", () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"        pm.expect(responseJson.message).to.eql(\"Невозможно создать пост, заполните поля\" );\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{tomorrow_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_post_without_token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"error\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"code\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"message\");\r",
+									"});\r",
+									"pm.test(\"Error text is correct\", () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.error).to.eql(\"Необходимо авторизоваться\");\r",
+									"});\r",
+									"pm.test(\"Error message is correct\", () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message).to.eql(\"No API token provided or is not valid\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.jpg"
+								},
+								{
+									"key": "title",
+									"value": "Проснувшись однажды.",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Душа моя озарена неземной радостью, как эти чудесн",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь от всего сердца. Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив, мой друг, так упоен ощущением покоя, что искусство мое страдает от этого. Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч.",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{tomorrow_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_post_with_empty_token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"error\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"code\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"message\");\r",
+									"});\r",
+									"pm.test(\"Error text is correct\", () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.error).to.eql(\"Необходимо авторизоваться\");\r",
+									"});\r",
+									"pm.test(\"Error message is correct\", () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message).to.eql(\"No API token provided or is not valid\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "123",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.jpg"
+								},
+								{
+									"key": "title",
+									"value": "Проснувшись однажды.",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Душа моя озарена неземной радостью, как эти чудесн",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь от всего сердца. Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив, мой друг, так упоен ощущением покоя, что искусство мое страдает от этого. Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч.",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{tomorrow_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts?X-Auth-Token",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "X-Auth-Token",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_post_with_wrong_token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"error\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"code\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"message\");\r",
+									"});\r",
+									"pm.test(\"Error text is correct\", () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.error).to.eql(\"Необходимо авторизоваться\");\r",
+									"});\r",
+									"pm.test(\"Error message is correct\", () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message).to.eql(\"No API token provided or is not valid\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "123",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.jpg"
+								},
+								{
+									"key": "title",
+									"value": "Проснувшись однажды.",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Душа моя озарена неземной радостью, как эти чудесн",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь от всего сердца. Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив, мой друг, так упоен ощущением покоя, что искусство мое страдает от этого. Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч.",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{tomorrow_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Check Title",
+			"item": [
+				{
+					"name": "create_post_with_title_40_symbols",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"item\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"title\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"description\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"content\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"authorId\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"mainImage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"updatedAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"createdAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"labels\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"delayPublishTo\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"draft\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.jpg"
+								},
+								{
+									"key": "title",
+									"value": "Lorem ipsum dolor sit amet, consectetuer",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Душа моя озарена неземной радостью, как эти чудесн",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь от всего сердца. Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив, мой друг, так упоен ощущением покоя, что искусство мое страдает от этого. Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч.",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{tomorrow_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_post_with_title_41_symbols",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 200\", function () {\r",
+									"    pm.response.to.not.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.jpg"
+								},
+								{
+									"key": "title",
+									"value": "Lorem ipsum dolor sit amet, consectetuer.",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Душа моя озарена неземной радостью, как эти чудесн",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь от всего сердца. Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив, мой друг, так упоен ощущением покоя, что искусство мое страдает от этого. Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч.",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{tomorrow_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Check Description",
+			"item": [
+				{
+					"name": "create_post_with_description_100_symbols",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"item\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"title\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"description\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"content\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"authorId\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"mainImage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"updatedAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"createdAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"labels\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"delayPublishTo\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"draft\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.jpg"
+								},
+								{
+									"key": "title",
+									"value": "Проснувшись однажды.",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь от всего сердца. Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив, мой друг, так упоен ощущением покоя, что искусство мое страдает от этого. Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч.",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{tomorrow_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_post_with_description_101_symbols",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 200\", function () {\r",
+									"    pm.response.to.not.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.jpg"
+								},
+								{
+									"key": "title",
+									"value": "Проснувшись однажды.",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean ma",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь от всего сердца. Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив, мой друг, так упоен ощущением покоя, что искусство мое страдает от этого. Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч.",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{tomorrow_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Check Content",
+			"item": [
+				{
+					"name": "create_post_with_content_1000_symbols",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"item\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"title\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"description\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"content\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"authorId\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"mainImage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"updatedAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"createdAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"labels\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"delayPublishTo\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"draft\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.jpg"
+								},
+								{
+									"key": "title",
+									"value": "Проснувшись однажды.",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Душа моя озарена неземной радостью, как эти чудесн",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. N",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{tomorrow_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_post_with_content_1001_symbols",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 200\", function () {\r",
+									"    pm.response.to.not.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.jpg"
+								},
+								{
+									"key": "title",
+									"value": "Проснувшись однажды.",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Душа моя озарена неземной радостью, как эти чудесн",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Na",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{tomorrow_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Check Delay post to",
+			"item": [
+				{
+					"name": "create_post_with_current_date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"item\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"title\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"description\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"content\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"authorId\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"mainImage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"updatedAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"createdAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"labels\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"delayPublishTo\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"draft\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.jpg"
+								},
+								{
+									"key": "title",
+									"value": "Проснувшись однажды.",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Душа моя озарена неземной радостью, как эти чудесн",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь от всего сердца. Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив, мой друг, так упоен ощущением покоя, что искусство мое страдает от этого. Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч.",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{current_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_post_with_yesterday_date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 200\", function () {\r",
+									"    pm.response.to.not.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.jpg"
+								},
+								{
+									"key": "title",
+									"value": "Проснувшись однажды.",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Душа моя озарена неземной радостью, как эти чудесн",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь от всего сердца. Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив, мой друг, так упоен ощущением покоя, что искусство мое страдает от этого. Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч.",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{yesterday_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Check Image",
+			"item": [
+				{
+					"name": "create_post_with_jpeg",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"item\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"title\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"description\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"content\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"authorId\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"mainImage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"updatedAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"createdAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"labels\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"delayPublishTo\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"draft\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.jpeg"
+								},
+								{
+									"key": "title",
+									"value": "Проснувшись однажды.",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Душа моя озарена неземной радостью, как эти чудесн",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь от всего сердца. Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив, мой друг, так упоен ощущением покоя, что искусство мое страдает от этого. Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч.",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{tomorrow_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_post_with_png",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"item\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"title\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"description\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"content\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"authorId\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"mainImage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"updatedAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"createdAt\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"labels\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"delayPublishTo\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"draft\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.png"
+								},
+								{
+									"key": "title",
+									"value": "Проснувшись однажды.",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Душа моя озарена неземной радостью, как эти чудесн",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь от всего сердца. Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив, мой друг, так упоен ощущением покоя, что искусство мое страдает от этого. Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч.",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{tomorrow_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_post_with_image_3Mb",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 200\", function () {\r",
+									"    pm.response.to.not.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "bigIMG.jpg"
+								},
+								{
+									"key": "title",
+									"value": "Проснувшись однажды.",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Душа моя озарена неземной радостью, как эти чудесн",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь от всего сердца. Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив, мой друг, так упоен ощущением покоя, что искусство мое страдает от этого. Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч.",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{yesterday_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_post_with_not_format_image",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 200\", function () {\r",
+									"    pm.response.to.not.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.bmp"
+								},
+								{
+									"key": "title",
+									"value": "Проснувшись однажды.",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Душа моя озарена неземной радостью, как эти чудесн",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь от всего сердца. Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив, мой друг, так упоен ощущением покоя, что искусство мое страдает от этого. Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч.",
+									"type": "text"
+								},
+								{
+									"key": "isDraft",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "delayPublishTo",
+									"value": "{{yesterday_date}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"var current_date = new Date();",
+					"pm.collectionVariables.set(\"current_date\", ",
+					"            current_date.toISOString().slice(0, 10));",
+					"",
+					"current_date.setDate(current_date.getDate() - 1)",
+					"pm.collectionVariables.set(\"yesterday_date\", ",
+					"            current_date.toISOString().slice(0, 10));",
+					"",
+					"current_date.setDate(current_date.getDate() + 2)",
+					"pm.collectionVariables.set(\"tomorrow_date\", ",
+					"            current_date.toISOString().slice(0, 10));"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token_test_user",
+			"value": ""
+		},
+		{
+			"key": "current_date",
+			"value": ""
+		},
+		{
+			"key": "yesterday_date",
+			"value": ""
+		},
+		{
+			"key": "tomorrow_date",
+			"value": ""
+		},
+		{
+			"key": "url",
+			"value": "test-stand.gb.ru",
+			"type": "string"
+		},
+		{
+			"key": "admin_token",
+			"value": ""
+		},
+		{
+			"key": "test_username",
+			"value": ""
+		},
+		{
+			"key": "test_password",
+			"value": ""
+		}
+	]
+}

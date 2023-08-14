@@ -1,0 +1,3605 @@
+{
+	"info": {
+		"_postman_id": "7c47b13c-2f55-496e-852e-69908e4296f7",
+		"name": "User Profile",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25360110"
+	},
+	"item": [
+		{
+			"name": "Get User Token",
+			"item": [
+				{
+					"name": "login_admin_profile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"admin_token\", pm.response.json().token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "GB202307276130",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "8b0444ef41",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/login",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_test_user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"test_username\", Math.random().toString(36).substr(2, 10));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();\r",
+									"pm.collectionVariables.set(\"test_username\", data.item.username);\r",
+									"pm.collectionVariables.set(\"test_password\", data.item.password);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+								},
+								{
+									"key": "firstName",
+									"value": "Ivan",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "Ivanov",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{test_username}}",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "89056789809",
+									"type": "text"
+								},
+								{
+									"key": "sex",
+									"value": "male",
+									"type": "text"
+								},
+								{
+									"key": "birthDate",
+									"value": "1985-01-01",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/dummies",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"dummies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_test_user2",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"test_username2\", Math.random().toString(36).substr(2, 10));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();\r",
+									"pm.collectionVariables.set(\"test_username2\", data.item.username);\r",
+									"pm.collectionVariables.set(\"test_password2\", data.item.password);\r",
+									"pm.collectionVariables.set('id_test_user2', pm.response.json().item.id)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+								},
+								{
+									"key": "firstName",
+									"value": "Ivan",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "Ivanov",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{test_username2}}",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "89167755566",
+									"type": "text"
+								},
+								{
+									"key": "sex",
+									"value": "male",
+									"type": "text"
+								},
+								{
+									"key": "birthDate",
+									"value": "1985-01-01",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/dummies",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"dummies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "auth_test_user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set('token_test_user', pm.response.json().token)\r",
+									"pm.collectionVariables.set('id_test_user', pm.response.json().id)\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "{{test_username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{test_password}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/login",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reading Profile",
+			"item": [
+				{
+					"name": "read_valid_profile_without_token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 200\", function () {\r",
+									"    pm.response.to.not.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const jar = pm.cookies.jar();\r",
+									"jar.clear('test-stand.gb.ru');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://{{url}}/api/users/profile/{{id_test_user}}",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"profile",
+								"{{id_test_user}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "read_valid_profile_with_token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"firstName\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"lastName\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"username\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"phone\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"status\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"sex\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"birthDate\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"avatar\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{url}}/api/users/profile/{{id_test_user}}",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"profile",
+								"{{id_test_user}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "read_not_my_profile_with_token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include('\"error\":\"critical\"');\r",
+									"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+									"    pm.expect(pm.response.text()).to.include('\"message\":\"Вы запрашиваете чужого пользователя.\"');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{url}}/api/users/profile/{{id_test_user2}}",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"profile",
+								"{{id_test_user2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "read_not_valid_profile_with_token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{url}}/api/users/profile/999999999",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"profile",
+								"999999999"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Edit profile",
+			"item": [
+				{
+					"name": "Validate First Name",
+					"item": [
+						{
+							"name": "edit_firstName_length_3",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Iva",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89056789809",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_firstName_length_20",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "01234567890123456789",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89056789809",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_firstName_length_2",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include('\"error\":\"Неуспешная попытка создания аккаунта\"');\r",
+											"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+											"    pm.expect(pm.response.text()).to.include('message');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "01",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89056789809",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_firstName_length_21",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include('\"error\":\"Неуспешная попытка создания аккаунта\"');\r",
+											"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+											"    pm.expect(pm.response.text()).to.include('message');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "012345678901234567891",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89056789809",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Validate Last Name",
+					"item": [
+						{
+							"name": "edit_lastName_length_3",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Ivan",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "012",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89056789809",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_lastName_length_20",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Ivan",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "01234567890123456789",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89056789809",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_lastName_length_2",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include('\"error\":\"Неуспешная попытка создания аккаунта\"');\r",
+											"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+											"    pm.expect(pm.response.text()).to.include('message');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Ivan",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "01",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89056789809",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_lastName_length_21",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include('\"error\":\"Неуспешная попытка создания аккаунта\"');\r",
+											"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+											"    pm.expect(pm.response.text()).to.include('message');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Ivan",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "012345678901234567891",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89056789809",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Validate Phone",
+					"item": [
+						{
+							"name": "edit_not_unic_phone",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include('\"error\":\"Неуспешная попытка создания аккаунта\"');\r",
+											"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+											"    pm.expect(pm.response.text()).to.include('message');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Ivan",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89167755566",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_phone_with+",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Ivan",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "+1234567890",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_phone_length_10",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Ivan",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "1234567890",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_phone_length_12",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Ivan",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "123456789012",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_phone_length_9",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include('\"error\":\"Неуспешная попытка создания аккаунта\"');\r",
+											"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+											"    pm.expect(pm.response.text()).to.include('message');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Ivan",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "123456789",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_phone_length_13",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include('\"error\":\"Неуспешная попытка создания аккаунта\"');\r",
+											"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+											"    pm.expect(pm.response.text()).to.include('message');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Ivan",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "1234567890123",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Validate Birthday",
+					"item": [
+						{
+							"name": "edit_birthday_7_years",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var current_date = new Date();\r",
+											"current_date.setFullYear(current_date.getFullYear() - 7);\r",
+											"pm.variables.set(\"date\", \r",
+											"            current_date.toISOString().slice(0, 10));"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Iva",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89056789809",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "{{date}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_birthday_100_years",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var current_date = new Date();\r",
+											"current_date.setFullYear(current_date.getFullYear() - 100);\r",
+											"pm.variables.set(\"date\", \r",
+											"            current_date.toISOString().slice(0, 10));"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "01234567890123456789",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89056789809",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "{{date}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_birthday_less_7_years",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var current_date = new Date();\r",
+											"current_date.setFullYear(current_date.getFullYear() - 7);\r",
+											"current_date.setDate(current_date.getDate() + 1)\r",
+											"pm.variables.set(\"date\", \r",
+											"            current_date.toISOString().slice(0, 10));"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include('\"error\":\"Неуспешная попытка создания аккаунта\"');\r",
+											"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+											"    pm.expect(pm.response.text()).to.include('message');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "01",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89056789809",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "{{date}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_birthday_older_101_years",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include('\"error\":\"Неуспешная попытка создания аккаунта\"');\r",
+											"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+											"    pm.expect(pm.response.text()).to.include('message');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "012345678901234567891",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89056789809",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "{{date}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Validate Username",
+					"item": [
+						{
+							"name": "edit_not_unic_username",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Ivan",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{test_username2}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89056789809",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_username_length_3",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var abc = 'qwertyuiopasdfghjklzxcvbnm';\r",
+											"var name = '';\r",
+											"while (name.length < 3) {\r",
+											"    name += abc[Math.floor(Math.random() * abc.length)];\r",
+											"}\r",
+											"pm.collectionVariables.set('new_username', name);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Iva",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{new_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89056789809",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_username_length_20",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var abc = 'qwertyuiopasdfghjklzxcvbnm';\r",
+											"var name = '';\r",
+											"while (name.length < 20) {\r",
+											"    name += abc[Math.floor(Math.random() * abc.length)];\r",
+											"}\r",
+											"pm.collectionVariables.set('new_username', name);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "01234567890123456789",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{new_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89056789809",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_username_length_2",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var abc = 'qwertyuiopasdfghjklzxcvbnm';\r",
+											"var name = '';\r",
+											"while (name.length < 2) {\r",
+											"    name += abc[Math.floor(Math.random() * abc.length)];\r",
+											"}\r",
+											"pm.collectionVariables.set('new_username', name);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include('\"error\":\"Неуспешная попытка создания аккаунта\"');\r",
+											"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+											"    pm.expect(pm.response.text()).to.include('message');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "01",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{new_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89056789809",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_username_length_21",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var abc = 'qwertyuiopasdfghjklzxcvbnm';\r",
+											"var name = '';\r",
+											"while (name.length < 21) {\r",
+											"    name += abc[Math.floor(Math.random() * abc.length)];\r",
+											"}\r",
+											"pm.collectionVariables.set('new_username', name);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include('\"error\":\"Неуспешная попытка создания аккаунта\"');\r",
+											"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+											"    pm.expect(pm.response.text()).to.include('message');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/sweet/Desktop/IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Ivan",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Ivanov",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{new_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "89056789809",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1985-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Required Fields",
+					"item": [
+						{
+							"name": "edit_profile_without_image",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var abc = 'qwertyuiopasdfghjklzxcvbnm';\r",
+											"var name = '';\r",
+											"while (name.length < 10) {\r",
+											"    name += abc[Math.floor(Math.random() * abc.length)];\r",
+											"}\r",
+											"pm.collectionVariables.set('new_username', name);\r",
+											"\r",
+											"pm.collectionVariables.set(\"phone\", Math.random().toString(10).substr(2, 11));"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": [],
+											"disabled": true
+										},
+										{
+											"key": "firstName",
+											"value": "Irina",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Petrova",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{new_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "{{phone}}",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "female",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1995-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_profile_without_firstName",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var abc = 'qwertyuiopasdfghjklzxcvbnm';\r",
+											"var name = '';\r",
+											"while (name.length < 10) {\r",
+											"    name += abc[Math.floor(Math.random() * abc.length)];\r",
+											"}\r",
+											"pm.collectionVariables.set('new_username', name);\r",
+											"\r",
+											"pm.collectionVariables.set(\"phone\", Math.random().toString(10).substr(2, 11));"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include('\"error\":\"Неуспешная попытка создания аккаунта\"');\r",
+											"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+											"    pm.expect(pm.response.text()).to.include('message');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Petrova",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{new_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "{{phone}}",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "female",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1995-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_profile_without_lastName",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var abc = 'qwertyuiopasdfghjklzxcvbnm';\r",
+											"var name = '';\r",
+											"while (name.length < 10) {\r",
+											"    name += abc[Math.floor(Math.random() * abc.length)];\r",
+											"}\r",
+											"pm.collectionVariables.set('new_username', name);\r",
+											"\r",
+											"pm.collectionVariables.set(\"phone\", Math.random().toString(10).substr(2, 11));"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include('\"error\":\"Неуспешная попытка создания аккаунта\"');\r",
+											"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+											"    pm.expect(pm.response.text()).to.include('message');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Irina",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{new_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "{{phone}}",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "female",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1995-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_profile_without_username",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"phone\", Math.random().toString(10).substr(2, 11));"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include('\"error\":\"Неуспешная попытка создания аккаунта\"');\r",
+											"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+											"    pm.expect(pm.response.text()).to.include('message');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Irina",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Petrova",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "{{phone}}",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "female",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1995-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_profile_without_phone",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var abc = 'qwertyuiopasdfghjklzxcvbnm';\r",
+											"var name = '';\r",
+											"while (name.length < 10) {\r",
+											"    name += abc[Math.floor(Math.random() * abc.length)];\r",
+											"}\r",
+											"pm.collectionVariables.set('new_username', name);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include('\"error\":\"Неуспешная попытка создания аккаунта\"');\r",
+											"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+											"    pm.expect(pm.response.text()).to.include('message');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Irina",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Petrova",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{new_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "female",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1995-01-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit_profile_without_birthday",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var abc = 'qwertyuiopasdfghjklzxcvbnm';\r",
+											"var name = '';\r",
+											"while (name.length < 10) {\r",
+											"    name += abc[Math.floor(Math.random() * abc.length)];\r",
+											"}\r",
+											"pm.collectionVariables.set('new_username', name);\r",
+											"pm.collectionVariables.set(\"phone\", Math.random().toString(10).substr(2, 11));"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include('\"error\":\"Неуспешная попытка создания аккаунта\"');\r",
+											"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+											"    pm.expect(pm.response.text()).to.include('message');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{token_test_user}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "IMG.jpg"
+										},
+										{
+											"key": "firstName",
+											"value": "Irina",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Petrova",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{new_username}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "{{phone}}",
+											"type": "text"
+										},
+										{
+											"key": "sex",
+											"value": "female",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+									"protocol": "https",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"gateway",
+										"users",
+										"profile",
+										"{{id_test_user}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "edit_my_profile_with_token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Check firstname\", function () {\r",
+									"    var data = pm.request.body.firstname;\r",
+									"    pm.expect(pm.response.json().firstname).to.eql(data);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var abc = 'qwertyuiopasdfghjklzxcvbnm';\r",
+									"var name = '';\r",
+									"while (name.length < 10) {\r",
+									"    name += abc[Math.floor(Math.random() * abc.length)];\r",
+									"}\r",
+									"pm.collectionVariables.set('new_username', name);\r",
+									"\r",
+									"pm.collectionVariables.set(\"phone\", Math.random().toString(10).substr(2, 11));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.jpg"
+								},
+								{
+									"key": "firstName",
+									"value": "Irina",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "Petrova",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{new_username}}",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "{{phone}}",
+									"type": "text"
+								},
+								{
+									"key": "sex",
+									"value": "female",
+									"type": "text"
+								},
+								{
+									"key": "birthDate",
+									"value": "1995-01-01",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"users",
+								"profile",
+								"{{id_test_user}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "edit_my_profile_without_token",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var abc = 'qwertyuiopasdfghjklzxcvbnm';\r",
+									"var name = '';\r",
+									"while (name.length < 10) {\r",
+									"    name += abc[Math.floor(Math.random() * abc.length)];\r",
+									"}\r",
+									"pm.collectionVariables.set('new_username', name);\r",
+									"\r",
+									"pm.collectionVariables.set(\"phone\", Math.random().toString(10).substr(2, 11));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 200\", function () {\r",
+									"    pm.response.to.not.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.jpg"
+								},
+								{
+									"key": "firstName",
+									"value": "Irina",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "Petrova",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{new_username}}",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "{{phone}}",
+									"type": "text"
+								},
+								{
+									"key": "sex",
+									"value": "female",
+									"type": "text"
+								},
+								{
+									"key": "birthDate",
+									"value": "1995-01-01",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/users/profile/{{id_test_user}}",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"users",
+								"profile",
+								"{{id_test_user}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "edit_not_my_profile_with_token",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var abc = 'qwertyuiopasdfghjklzxcvbnm';\r",
+									"var name = '';\r",
+									"while (name.length < 10) {\r",
+									"    name += abc[Math.floor(Math.random() * abc.length)];\r",
+									"}\r",
+									"pm.collectionVariables.set('new_username', name);\r",
+									"\r",
+									"pm.collectionVariables.set(\"phone\", Math.random().toString(10).substr(2, 11));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 200\", function () {\r",
+									"    pm.response.to.not.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "IMG.jpg"
+								},
+								{
+									"key": "firstName",
+									"value": "Irina",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "Petrova",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{new_username}}",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "{{phone}}",
+									"type": "text"
+								},
+								{
+									"key": "sex",
+									"value": "female",
+									"type": "text"
+								},
+								{
+									"key": "birthDate",
+									"value": "1995-01-01",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/users/profile/{{id_test_user2}}}",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"users",
+								"profile",
+								"{{id_test_user2}}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token_test_user",
+			"value": ""
+		},
+		{
+			"key": "id_test_user",
+			"value": ""
+		},
+		{
+			"key": "phone",
+			"value": ""
+		},
+		{
+			"key": "admin_token",
+			"value": ""
+		},
+		{
+			"key": "test_username",
+			"value": ""
+		},
+		{
+			"key": "test_password",
+			"value": ""
+		},
+		{
+			"key": "test_username2",
+			"value": ""
+		},
+		{
+			"key": "test_password2",
+			"value": ""
+		},
+		{
+			"key": "id_test_user2",
+			"value": ""
+		},
+		{
+			"key": "new_username",
+			"value": ""
+		}
+	]
+}

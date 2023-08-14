@@ -1,0 +1,395 @@
+{
+	"info": {
+		"_postman_id": "57185859-5724-4d5a-9a60-29bd62ec855f",
+		"name": "Support",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25360110"
+	},
+	"item": [
+		{
+			"name": "all_fields_type_in",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"time\", Date.now());"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include('\"id\":');\r",
+							"    pm.expect(pm.response.text()).to.include('\"name\":\"ivan\"');\r",
+							"    pm.expect(pm.response.text()).to.include('\"email\":\"ivan@\"');\r",
+							"    pm.expect(pm.response.text()).to.include('\"message\":\"Gjsdfock\"');\r",
+							"    pm.expect(pm.response.text()).to.include('\"createdAt\":');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "ivan",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "ivan@",
+							"type": "text"
+						},
+						{
+							"key": "message",
+							"value": "Gjsdfock",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://{{url}}/gateway/support?timestamp={{time}}",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"gateway",
+						"support"
+					],
+					"query": [
+						{
+							"key": "timestamp",
+							"value": "{{time}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fields_name_is_empty",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"time\", Date.now());"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include('\"error\":\"critical\"');\r",
+							"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+							"    pm.expect(pm.response.text()).to.include('\"message\":\"Пожалуйста, заполните все поля.\"');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "ivan@",
+							"type": "text"
+						},
+						{
+							"key": "message",
+							"value": "Gjsdfock",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://{{url}}/gateway/support?timestamp={{time}}",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"gateway",
+						"support"
+					],
+					"query": [
+						{
+							"key": "timestamp",
+							"value": "{{time}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fields_content_is_empty",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"time\", Date.now());"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include('\"error\":\"critical\"');\r",
+							"    pm.expect(pm.response.text()).to.include('\"code\":400');\r",
+							"    pm.expect(pm.response.text()).to.include('\"message\":\"Пожалуйста, заполните все поля.\"');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "ivan",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "ivan@",
+							"type": "text"
+						},
+						{
+							"key": "message",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://{{url}}/gateway/support?timestamp={{time}}",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"gateway",
+						"support"
+					],
+					"query": [
+						{
+							"key": "timestamp",
+							"value": "{{time}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fields_name_length_31",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"time\", Date.now());"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "1234567890123456789012345678901",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "ivan@",
+							"type": "text"
+						},
+						{
+							"key": "message",
+							"value": "Gjsdfock",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://{{url}}/gateway/support?timestamp={{time}}",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"gateway",
+						"support"
+					],
+					"query": [
+						{
+							"key": "timestamp",
+							"value": "{{time}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fields_email_wihtout_@",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"time\", Date.now());"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "ivan",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "ivan",
+							"type": "text"
+						},
+						{
+							"key": "message",
+							"value": "Gjsdfock",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://{{url}}/gateway/support?timestamp={{time}}",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"gateway",
+						"support"
+					],
+					"query": [
+						{
+							"key": "timestamp",
+							"value": "{{time}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "time",
+			"value": ""
+		},
+		{
+			"key": "url",
+			"value": "test-stand.gb.ru",
+			"type": "string"
+		}
+	]
+}

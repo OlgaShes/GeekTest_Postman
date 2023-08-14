@@ -1,0 +1,624 @@
+{
+	"info": {
+		"_postman_id": "daa1db07-8c6f-4707-9950-c40b386f2b74",
+		"name": "Get  posts",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25360110"
+	},
+	"item": [
+		{
+			"name": "Get User Token",
+			"item": [
+				{
+					"name": "/login_student_profile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"token\", jsonData.token);\r",
+									"pm.environment.set(\"token_env!\", jsonData.token)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "GB202307ffbe611",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "f7cbe9a098",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/login",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/create_test_user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"username\", pm.collectionVariables.get(\"username\") + 1);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();",
+									"pm.collectionVariables.set(\"test_username\", data.item.username);",
+									"pm.collectionVariables.set(\"test_password\", data.item.password);",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "lastName",
+									"value": "Ivan",
+									"type": "text"
+								},
+								{
+									"key": "firstName",
+									"value": "Ivan",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "89201001010",
+									"type": "text"
+								},
+								{
+									"key": "sex",
+									"value": "male",
+									"type": "text"
+								},
+								{
+									"key": "birthDate",
+									"value": "2020-10-10",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/dummies",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"dummies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/login_test_user_profile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"token_test_user\", jsonData.token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "{{test_username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{test_password}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/login",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get Post",
+			"item": [
+				{
+					"name": "get_exist_post_wiht_timestamp",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const time = Date.now();\r",
+									"pm.collectionVariables.set(\"time\", time);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include('\"id\":');\r",
+									"    pm.expect(pm.response.text()).to.include('\"title\":');\r",
+									"    pm.expect(pm.response.text()).to.include('\"description\":');\r",
+									"    pm.expect(pm.response.text()).to.include('\"content\":');\r",
+									"    pm.expect(pm.response.text()).to.include('\"authorId\":');\r",
+									"    pm.expect(pm.response.text()).to.include('\"mainImage\":');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://test-stand.gb.ru/api/posts/1?timestamp={{time}}",
+							"protocol": "https",
+							"host": [
+								"test-stand",
+								"gb",
+								"ru"
+							],
+							"path": [
+								"api",
+								"posts",
+								"1"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{time}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_exist_post_wiht_admin_mode",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const time = Date.now();\r",
+									"pm.collectionVariables.set(\"time\", time);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include('\"id\":');\r",
+									"    pm.expect(pm.response.text()).to.include('\"title\":');\r",
+									"    pm.expect(pm.response.text()).to.include('\"description\":');\r",
+									"    pm.expect(pm.response.text()).to.include('\"content\":');\r",
+									"    pm.expect(pm.response.text()).to.include('\"authorId\":');\r",
+									"    pm.expect(pm.response.text()).to.include('\"mainImage\":');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://test-stand.gb.ru/api/posts/9990?timestamp={{time}}&admin_mode=true",
+							"protocol": "https",
+							"host": [
+								"test-stand",
+								"gb",
+								"ru"
+							],
+							"path": [
+								"api",
+								"posts",
+								"9990"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{time}}"
+								},
+								{
+									"key": "admin_mode",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_exist_post_wiht_admin_mode_false",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const time = Date.now();\r",
+									"pm.collectionVariables.set(\"time\", time);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://test-stand.gb.ru/api/posts/9990?timestamp={{time}}&admin_mode=false",
+							"protocol": "https",
+							"host": [
+								"test-stand",
+								"gb",
+								"ru"
+							],
+							"path": [
+								"api",
+								"posts",
+								"9990"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{time}}"
+								},
+								{
+									"key": "admin_mode",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_not_exist_post",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const time = Date.now();\r",
+									"pm.collectionVariables.set(\"time\", time);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include('\"error\":\"critical\"');\r",
+									"    pm.expect(pm.response.text()).to.include('\"code\":404');\r",
+									"    pm.expect(pm.response.text()).to.include('\"message\":\"Такого поста не существует\"');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://test-stand.gb.ru/api/posts/100500?timestamp={{time}}",
+							"protocol": "https",
+							"host": [
+								"test-stand",
+								"gb",
+								"ru"
+							],
+							"path": [
+								"api",
+								"posts",
+								"100500"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{time}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_exist_post_without_timestamp",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://test-stand.gb.ru/api/posts/1",
+							"protocol": "https",
+							"host": [
+								"test-stand",
+								"gb",
+								"ru"
+							],
+							"path": [
+								"api",
+								"posts",
+								"1"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{time}}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_post_wihtout_token",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const time = Date.now();\r",
+									"pm.collectionVariables.set(\"time\", time);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include('\"message\":\"No API token provided or is not valid\"');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://test-stand.gb.ru/api/posts/1?timestamp={{time}}",
+							"protocol": "https",
+							"host": [
+								"test-stand",
+								"gb",
+								"ru"
+							],
+							"path": [
+								"api",
+								"posts",
+								"1"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{time}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "username",
+			"value": ""
+		},
+		{
+			"key": "test_username",
+			"value": ""
+		},
+		{
+			"key": "test_password",
+			"value": ""
+		},
+		{
+			"key": "token_test_user",
+			"value": ""
+		},
+		{
+			"key": "time",
+			"value": ""
+		}
+	]
+}

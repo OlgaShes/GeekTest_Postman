@@ -1,0 +1,984 @@
+{
+	"info": {
+		"_postman_id": "cbd53eb5-5e2f-47bd-80ea-bfb70e0fc955",
+		"name": "Read Blog",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25360110"
+	},
+	"item": [
+		{
+			"name": "Authorization",
+			"item": [
+				{
+					"name": "auth_test_user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"token_test_user\", jsonData.token);\r",
+									"pm.collectionVariables.set(\"id_test_user\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableCookies": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "i58rlbj9ea",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "f94cdaa004",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/login",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "auth_with_invalid_creds",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"pm.test(\"Contains error message\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Проверьте логин и пароль\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableCookies": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "111",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "111",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{url}}/gateway/login",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gateway",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get my posts page",
+			"item": [
+				{
+					"name": "get_my_posts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"data\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"meta\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"prevPage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"nextPage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+									"});\r",
+									"pm.test(\"Data is not empty\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data).to.not.eql([]);\r",
+									"});\r",
+									"pm.test(\"Next page is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.meta.nextPage).to.be.oneOf([2, null]);\r",
+									"});\r",
+									"pm.test(\"All the posts are mine\", function () {\r",
+									"    var pageData = pm.response.json().data;\r",
+									"    pageData.forEach(elem => \r",
+									"    pm.expect(elem.authorId).to.eql(pm.collectionVariables.get(\"id_test_user\")))\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableCookies": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{url}}/api/posts?sort=createdAt&order=DESC&page=1",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "createdAt"
+								},
+								{
+									"key": "order",
+									"value": "DESC"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_my_posts_ordered_ASC",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"data\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"meta\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"prevPage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"nextPage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+									"});\r",
+									"pm.test(\"Data is not empty\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data).to.not.eql([]);\r",
+									"});\r",
+									"pm.test(\"Next page is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.meta.nextPage).to.be.oneOf([2, null]);\r",
+									"});\r",
+									"pm.test(\"All the posts are mine\", function () {\r",
+									"    var pageData = pm.response.json().data;\r",
+									"    pageData.forEach(elem => \r",
+									"    pm.expect(elem.authorId).to.eql(pm.collectionVariables.get(\"id_test_user\")))\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableCookies": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{url}}/api/posts?sort=createdAt&order=ASC&page=1",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "createdAt"
+								},
+								{
+									"key": "order",
+									"value": "ASC"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_my_wrong_page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"data\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"meta\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"prevPage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"nextPage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+									"});\r",
+									"pm.test(\"Data is empty\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data).to.eql([]);\r",
+									"});\r",
+									"pm.test(\"Next page is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.meta.nextPage).to.be.oneOf([1001, null]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableCookies": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{url}}/api/posts?sort=createdAt&order=DESC&page=1000",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "createdAt"
+								},
+								{
+									"key": "order",
+									"value": "DESC"
+								},
+								{
+									"key": "page",
+									"value": "1000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_my_posts_without_params",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"data\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"meta\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"prevPage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"nextPage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+									"});\r",
+									"pm.test(\"Data is not empty\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data).to.not.eql([]);\r",
+									"});\r",
+									"pm.test(\"All the posts are mine\", function () {\r",
+									"    var pageData = pm.response.json().data;\r",
+									"    pageData.forEach(elem => \r",
+									"    pm.expect(elem.authorId).to.eql(pm.collectionVariables.get(\"id_test_user\")))\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableCookies": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{url}}/api/posts",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "createdAt",
+									"disabled": true
+								},
+								{
+									"key": "order",
+									"value": "DESC",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_my_posts_without_tocken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const jar = pm.cookies.jar();\r",
+									"\r",
+									"jar.clear(pm.request.url, function (error) {\r",
+									"  // error - <Error>\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://{{url}}/api/posts?sort=createdAt&order=DESC&page=1",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "createdAt"
+								},
+								{
+									"key": "order",
+									"value": "DESC"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get not my posts page",
+			"item": [
+				{
+					"name": "get_not_my_posts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"data\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"meta\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"prevPage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"nextPage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+									"});\r",
+									"pm.test(\"Data is not empty\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data).to.not.eql([]);\r",
+									"});\r",
+									"pm.test(\"Next page is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.meta.nextPage).to.be.oneOf([2, null]);\r",
+									"});\r",
+									"pm.test(\"All the posts are not mine\", function () {\r",
+									"    var pageData = pm.response.json().data;\r",
+									"    pageData.forEach(elem => \r",
+									"    pm.expect(elem.authorId).to.not.eql(pm.collectionVariables.get(\"id_test_user\")))\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableCookies": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{url}}/api/posts?sort=createdAt&order=DESC&page=1&owner=notMe",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "createdAt"
+								},
+								{
+									"key": "order",
+									"value": "DESC"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "owner",
+									"value": "notMe"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_not_my_posts_ordered_ASC",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"data\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"meta\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"prevPage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"nextPage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+									"});\r",
+									"pm.test(\"Data is not empty\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data).to.not.eql([]);\r",
+									"});\r",
+									"pm.test(\"Next page is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.meta.nextPage).to.be.oneOf([2, null]);\r",
+									"});\r",
+									"pm.test(\"All the posts are not mine\", function () {\r",
+									"    var pageData = pm.response.json().data;\r",
+									"    pageData.forEach(elem => \r",
+									"    pm.expect(elem.authorId).to.not.eql(pm.collectionVariables.get(\"id_test_user\")))\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableCookies": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{url}}/api/posts?sort=createdAt&order=ASC&page=1&owner=notMe",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "createdAt"
+								},
+								{
+									"key": "order",
+									"value": "ASC"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "owner",
+									"value": "notMe"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_not_my_posts_ordered_ALL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"data\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"meta\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"prevPage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"nextPage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+									"});\r",
+									"pm.test(\"Data is not empty\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data).to.not.eql([]);\r",
+									"});\r",
+									"pm.test(\"Next page is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.meta.nextPage).to.be.oneOf([2, null]);\r",
+									"});\r",
+									"pm.test(\"All the posts are not mine\", function () {\r",
+									"    var pageData = pm.response.json().data;\r",
+									"    pageData.forEach(elem => \r",
+									"    pm.expect(elem.authorId).to.not.eql(pm.collectionVariables.get(\"id_test_user\")))\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableCookies": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{url}}/api/posts?sort=createdAt&order=ALL&page=1&owner=notMe",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "createdAt"
+								},
+								{
+									"key": "order",
+									"value": "ALL"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "owner",
+									"value": "notMe"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_not_my_wrong_page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"data\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"meta\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"prevPage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"nextPage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+									"});\r",
+									"pm.test(\"Data is empty\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data).to.eql([]);\r",
+									"});\r",
+									"pm.test(\"Next page is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.meta.nextPage).to.be.oneOf([1001, null]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableCookies": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{url}}/api/posts?sort=createdAt&order=DESC&page=100000000&owner=notMe",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "createdAt"
+								},
+								{
+									"key": "order",
+									"value": "DESC"
+								},
+								{
+									"key": "page",
+									"value": "100000000"
+								},
+								{
+									"key": "owner",
+									"value": "notMe"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_not_my_posts_without_params",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"data\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"meta\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"prevPage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"nextPage\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+									"});\r",
+									"pm.test(\"Data is not empty\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data).to.not.eql([]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableCookies": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{url}}/api/posts?owner=notMe",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "createdAt",
+									"disabled": true
+								},
+								{
+									"key": "order",
+									"value": "DESC",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "owner",
+									"value": "notMe"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_not_my_posts_without_tocken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const jar = pm.cookies.jar();\r",
+									"\r",
+									"jar.clear(pm.request.url, function (error) {\r",
+									"  // error - <Error>\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{token_test_user}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://{{url}}/api/posts?sort=createdAt&order=DESC&page=1&owner=notMe",
+							"protocol": "https",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "createdAt"
+								},
+								{
+									"key": "order",
+									"value": "DESC"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "owner",
+									"value": "notMe"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "test-stand.gb.ru",
+			"type": "string"
+		},
+		{
+			"key": "token_test_user",
+			"value": ""
+		},
+		{
+			"key": "id_test_user",
+			"value": ""
+		}
+	]
+}
